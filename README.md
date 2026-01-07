@@ -65,11 +65,17 @@ VIEW_DISTANCE=12
 
 ## 🌐 Conectarse al Servidor
 
-1. Railway te asignará un dominio público (ejemplo: `minechamp.up.railway.app`)
+1. Railway asignará un **TCP Proxy** (ejemplo: `turntable.proxy.rlwy.net:21751`)
 2. Abre Minecraft 1.21.11
 3. Multijugador → Añadir Servidor
-4. Dirección del servidor: `tudominio.railway.app:25565`
+4. **Dirección del servidor:** Usa el TCP Proxy que Railway te dio
+   - Ejemplo: `turntable.proxy.rlwy.net:21751`
+   - **NO uses** el dominio HTTP (no funciona para Minecraft)
 5. ¡Juega!
+
+### ⚠️ Importante
+- ✅ **USA:** El dominio TCP Proxy (`turntable.proxy.rlwy.net:PUERTO`)
+- ❌ **NO USES:** El dominio HTTP/HTTPS (`tudominio.devchefs.mx`)
 
 ## ⚙️ Personalización
 
