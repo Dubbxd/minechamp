@@ -1,11 +1,11 @@
-# Dockerfile para MineChamp Server 1.21.1
+# Dockerfile para MineChamp Server 1.21.11
 # Optimizado para Railway.app
 
 FROM eclipse-temurin:21-jre-alpine
 
 # Metadata
 LABEL maintainer="MineChamp Server"
-LABEL description="Minecraft Server 1.21.1 optimizado para Railway"
+LABEL description="Minecraft Server 1.21.11 optimizado para Railway"
 
 # Instalar dependencias necesarias
 RUN apk add --no-cache bash curl wget

@@ -3,7 +3,7 @@
 # Version 1.21.11
 
 echo "=========================================="
-echo "      MineChamp Server v1.21.1"
+echo "      MineChamp Server v1.21.11"
 echo "    Iniciando en Railway.app..."
 echo "=========================================="
 echo ""
