@@ -1,6 +1,6 @@
-# 🎮 MineChamp - Minecraft Server 1.21.11
+# 🎮 MineChamp - Minecraft Server 1.21.1
 
-Servidor de Minecraft 1.21.11 Vanilla optimizado para despliegue automático en Railway.app.
+Servidor de Minecraft 1.21.1 Vanilla optimizado para despliegue automático en Railway.app.
 
 **✅ Compatible con todos los launchers** - Mojang, TLauncher, MultiMC, etc.
 
