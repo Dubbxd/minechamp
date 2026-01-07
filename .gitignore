@@ -1,0 +1,37 @@
+# MineChamp Server
+
+# Mundos generados
+world/
+world_nether/
+world_the_end/
+
+# Logs y cache
+logs/
+cache/
+*.log
+
+# Datos de jugadores y permisos (se generan automáticamente)
+usercache.json
+usernamecache.json
+ops.json
+whitelist.json
+banned-players.json
+banned-ips.json
+
+# Backups locales
+backups/
+
+# Plugins
+plugins/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# Environment
+.env

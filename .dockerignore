@@ -1,0 +1,42 @@
+# Ignorar archivos innecesarios para el contenedor Docker
+
+# Directorios de Windows
+*.bat
+start-simple.bat
+backup.bat
+
+# Backups locales
+backups/
+
+# Logs locales
+logs/
+
+# Mundos generados localmente (se generan en el contenedor)
+world/
+world_nether/
+world_the_end/
+
+# Archivos de jugadores locales
+banned-ips.json
+banned-players.json
+ops.json
+whitelist.json
+usercache.json
+
+# Documentación
+README.md
+INICIO-RAPIDO.md
+CONFIGURACION.md
+
+# Git
+.git/
+.gitignore
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# Sistema
+.DS_Store
+Thumbs.db
