@@ -1,8 +1,19 @@
+<div align="center">
+
+![MineChamp Logo](cube-trophy.svg)
+
 # 🎮 MineChamp - Minecraft Server 1.21.11
 
-Servidor de Minecraft 1.21.11 Vanilla optimizado para despliegue automático en Railway.app.
-
+### Servidor de Minecraft optimizado para Railway.app
 **✅ Compatible con todos los launchers** - Mojang, TLauncher, MultiMC, etc.
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/minechamp)
+
+**Desarrollado por [Dubbxd](https://github.com/Dubbxd)**
+
+---
+
+</div>
 
 ## 🚀 Despliegue en Railway (3 pasos)
 
@@ -174,5 +185,31 @@ Luego en logs de Railway:
 
 ---
 
-**Repositorio:** https://github.com/Dubbxd/minechamp.git  
+## 👨‍💻 Desarrollador
+
+**Dubbxd**
+- GitHub: [@Dubbxd](https://github.com/Dubbxd)
+- Proyecto: [MineChamp](https://github.com/Dubbxd/minechamp)
+
+### 🛠️ Tecnologías Utilizadas
+
+- **Minecraft Server:** Vanilla 1.21.11
+- **Java Runtime:** Eclipse Temurin 21 (OpenJDK)
+- **Contenedor:** Docker Alpine Linux
+- **Platform:** Railway.app
+- **Optimización:** Aikar's JVM Flags
+
+### 📊 Características del Template
+
+✅ Despliegue automático con un click  
+✅ Variables de entorno configurables  
+✅ Optimizado para recursos limitados  
+✅ Compatible con launchers alternativos  
+✅ Reinicio automático ante fallos  
+✅ Logs en tiempo real  
+✅ Soporte para persistencia de datos  
+
+---
+
+**Repositorio:** https://github.com/Dubbxd/minechamp  
 **¡Servidor listo en 5 minutos! 🚂⛏️**
