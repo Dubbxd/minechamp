@@ -248,6 +248,98 @@ En los logs de Railway puedes ejecutar:
 2. Settings → Volumes
 3. Añade un volumen montado en `/minecraft/world`
 
+## 💰 Optimizar Costos en Railway
+
+### Configuración Económica Recomendada
+
+Para reducir el consumo de recursos y costos:
+
+**1. Ajusta la Memoria RAM**
+```env
+MEMORY_MIN=512M
+MEMORY_MAX=1G
+```
+- Usar solo la RAM necesaria reduce el consumo de recursos
+- Para 2-5 jugadores: 1GB es suficiente
+- Para 10-20 jugadores: 2GB recomendado
+
+**2. Reduce la Distancia de Visión**
+```env
+VIEW_DISTANCE=6
+SIMULATION_DISTANCE=6
+```
+- Menor distancia = menos chunks cargados = menos CPU/RAM
+- `VIEW_DISTANCE=6` es aceptable para juego normal
+- `VIEW_DISTANCE=10` solo para servidores grandes
+
+**3. Limita Jugadores Máximos**
+```env
+MAX_PLAYERS=10
+```
+- Cada jugador consume CPU y RAM
+- Sé realista con la cantidad esperada
+
+**4. Desactiva el Servidor cuando no se Use**
+
+Railway cobra por tiempo de ejecución:
+- **Opción 1:** Detén manualmente el servidor desde Railway Dashboard
+- **Opción 2:** Usa el comando `/stop` en los logs
+- **Opción 3:** Configura un horario de uso (requiere scripts externos)
+
+**5. Optimiza las Configuraciones del Servidor**
+
+En `server.properties`:
+```properties
+# Reduce carga de entidades
+spawn-animals=true (pero limita con plugins)
+spawn-monsters=true (considera peaceful en horas vacías)
+entity-broadcast-range-percentage=80
+
+# Optimiza chunks
+view-distance=6
+simulation-distance=6
+```
+
+En `spigot.yml`:
+```yaml
+world-settings:
+  default:
+    mob-spawn-range: 4
+    entity-activation-range:
+      animals: 16
+      monsters: 24
+      raiders: 32
+```
+
+**6. Usa el Plan Hobby Eficientemente**
+
+Railway Hobby Plan incluye:
+- $5 USD de crédito mensual gratuito
+- Suspensión automática tras inactividad (configurable)
+- Para uso casual (20-40 horas/mes) puede ser gratis
+
+**7. Monitorea el Uso**
+
+- Revisa las métricas de Railway regularmente
+- Identifica picos de consumo
+- Ajusta configuración según patrones de uso
+
+### Estimación de Costos
+
+**Ejemplo - Servidor Casual (1GB RAM, 30 horas/mes):**
+- Costo aproximado: **$2-4 USD/mes**
+- Ideal para jugar con amigos los fines de semana
+
+**Ejemplo - Servidor Regular (2GB RAM, 100 horas/mes):**
+- Costo aproximado: **$8-12 USD/mes**
+- Para comunidades pequeñas activas
+
+**Ejemplo - Servidor 24/7 (2GB RAM, 730 horas/mes):**
+- Costo aproximado: **$15-25 USD/mes**
+- Para servidores públicos permanentes
+
+💡 **Tip Pro:** Combina Railway con un bot de Discord que inicie/detenga el servidor automáticamente cuando los jugadores lo necesiten.
+
 ## 🐛 Solución de Problemas
 
 **El servidor no inicia:**
