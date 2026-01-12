@@ -20,29 +20,111 @@
 
 </div>
 
-## 🚀 Despliegue en Railway (3 pasos)
+## 🚀 Cómo Desplegarse en Railway
 
-### Opción 1: Deploy con Template Completo (Recomendado) 🌟
+### Paso 1: Click en Deploy to Railway 🚀
 
-**Despliega automáticamente ambos servicios (Proxy + Servidor) con un solo click:**
+Haz click en el botón para iniciar el despliegue automático:
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/minechamp)
 
-1. Click en el botón **"Deploy on Railway"**
-2. Railway creará automáticamente:
-   - ✅ **MineChamp Proxy** - Encendido automático (~$1/mes)
-   - ✅ **MineChamp Server** - Servidor de Minecraft con auto-hibernación
-3. Configura solo **una variable importante**:
-   - Ve a **MineChamp Proxy** → Variables → `RAILWAY_TOKEN`
-   - Obtén tu token en: [railway.app/account/tokens](https://railway.app/account/tokens)
-   - Pega el token y guarda
-4. Espera 2-3 minutos mientras se construyen los servicios
-5. Copia el **TCP Proxy** del servicio **MineChamp Proxy** (ej: `minechamp.railway.app:12345`)
-6. ¡Conéctate desde Minecraft!
-
-**¡Listo!** El servidor se apagará automáticamente cuando no haya jugadores y se encenderá cuando alguien intente conectarse.
+**¿Qué va a pasar?**
+- Railway desplegará automáticamente **2 servicios** en tu cuenta:
+  - 🚪 **Proxy Conect** - Proxy ligero para encendido automático
+  - ⛏️ **MineChamp** - Servidor de Minecraft 1.21.11
+- Los servicios se construirán automáticamente (3-5 minutos)
+- NO se te cobrará nada hasta que te conectes y juegues
 
 ---
+
+### Paso 2: Espera a que se construyan los servicios (3-5 min) ⏳
+
+Verás en tu Dashboard de Railway:
+- 🟡 **Building...** → Construyendo contenedores Docker
+- 🟢 **Active** → ¡Servicios listos!
+
+**Espera a que AMBOS servicios muestren** ✅ **Active**
+
+---
+
+### Paso 3: Configura 2 Variables en el Proxy 🔑
+
+**¿Por qué?** Para que el proxy pueda encender automáticamente el servidor cuando alguien intente conectarse.
+
+#### 3.1 Crear Railway Token
+
+1. Abre: **https://railway.app/account/tokens**
+2. Click en **"Create Token"**
+3. Nombre: `minechamp-proxy`
+4. **Copia el token** (⚠️ solo se muestra una vez)
+
+#### 3.2 Obtener Service ID del Servidor
+
+1. En Railway Dashboard → Click en servicio **"MineChamp"**
+2. Pestaña **"Settings"**
+3. Busca **"Service ID"** (abajo en la página)
+4. **Copia el ID** (ejemplo: `abc12345-def6-7890-ghij-klmnopqrstuv`)
+
+#### 3.3 Agregar Variables al Proxy
+
+1. Click en servicio **"Proxy Conect"**
+2. Pestaña **"Variables"**
+3. Agrega estas 2 variables:
+
+```
+RAILWAY_TOKEN = [el-token-que-copiaste]
+RAILWAY_SERVICE_ID = [el-service-id-que-copiaste]
+```
+
+4. Guarda (Enter en cada una)
+5. El proxy se reiniciará automáticamente (~30 segundos)
+
+---
+
+### Paso 4: Obtén la Dirección del Servidor 🌐
+
+1. Click en servicio **"Proxy Conect"** (⚠️ NO en MineChamp)
+2. Pestaña **"Settings"**
+3. Sección **"Networking"** → Busca **"TCP Proxy"**
+4. **Copia la dirección completa** (ejemplo: `proxy-production.up.railway.app:12345`)
+
+---
+
+### Paso 5: ¡Conéctate desde Minecraft! 🎮
+
+1. Abre **Minecraft 1.21.11** (Java Edition)
+2. Multijugador → Añadir Servidor
+3. **Dirección:** Pega la dirección TCP del Proxy (del Paso 4)
+4. **¡Juega!**
+
+**Primera conexión:**
+- Si el servidor está dormido verás: "Iniciando servidor..."
+- Espera **1-2 minutos** y reconecta
+- El servidor se está encendiendo automáticamente
+
+**Próximas conexiones:**
+- Si jugaste recientemente: conexión **instantánea**
+- Si nadie jugó por 10+ min: espera 1-2 min (está hibernando)
+
+---
+
+### 📖 ¿Necesitas ayuda detallada?
+
+👉 **[Ver guía completa paso a paso (SETUP-INSTRUCTIONS.md)](SETUP-INSTRUCTIONS.md)**
+- Troubleshooting de errores comunes
+- Cómo optimizar costos
+- Configuraciones avanzadas
+- Comandos de administrador
+
+---
+
+## 💡 Opciones Alternativas de Deploy
+
+### Opción 2: Deploy Manual (Sin proxy wake-on-connect)
+
+---
+
+## 💡 Opciones Alternativas de Deploy
 
 ### Opción 2: Deploy Manual (Sin proxy wake-on-connect)
 
