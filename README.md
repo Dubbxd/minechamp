@@ -4,18 +4,50 @@
 
 # 🎮 MineChamp - Minecraft Server 1.21.11
 
-### Servidor de Minecraft optimizado para Railway.app
-**✅ Compatible con todos los launchers** - Mojang, TLauncher, MultiMC, etc.
+### Servidor de Minecraft optimizado para Railway.app con Auto-Hibernación
+**✅ Compatible con todos los launchers** - Mojang, TLauncher, MultiMC, etc.  
+**😴 Se apaga automáticamente** cuando no hay jugadores  
+**🚀 Se enciende solo** cuando alguien intenta conectarse  
+**💰 Ahorra hasta 70%** en costos de hosting
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/minechamp)
 
 **Desarrollado por [Dubbxd](https://github.com/Dubbxd)**
+
+📖 **[Guía Rápida de Despliegue](DEPLOY-GUIDE.md)** | 💡 **Deploy en 5 minutos**
 
 ---
 
 </div>
 
 ## 🚀 Despliegue en Railway (3 pasos)
+
+### Opción 1: Deploy con Template Completo (Recomendado) 🌟
+
+**Despliega automáticamente ambos servicios (Proxy + Servidor) con un solo click:**
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/minechamp)
+
+1. Click en el botón **"Deploy on Railway"**
+2. Railway creará automáticamente:
+   - ✅ **MineChamp Proxy** - Encendido automático (~$1/mes)
+   - ✅ **MineChamp Server** - Servidor de Minecraft con auto-hibernación
+3. Configura solo **una variable importante**:
+   - Ve a **MineChamp Proxy** → Variables → `RAILWAY_TOKEN`
+   - Obtén tu token en: [railway.app/account/tokens](https://railway.app/account/tokens)
+   - Pega el token y guarda
+4. Espera 2-3 minutos mientras se construyen los servicios
+5. Copia el **TCP Proxy** del servicio **MineChamp Proxy** (ej: `minechamp.railway.app:12345`)
+6. ¡Conéctate desde Minecraft!
+
+**¡Listo!** El servidor se apagará automáticamente cuando no haya jugadores y se encenderá cuando alguien intente conectarse.
+
+---
+
+### Opción 2: Deploy Manual (Sin proxy wake-on-connect)
+
+<details>
+<summary>Click para ver instrucciones de deploy manual</summary>
 
 ### 1. Fork o Clone este repositorio
 
@@ -56,6 +88,13 @@ En el Dashboard de Railway, ve a la pestaña **Variables** y configura:
 |----------|---------|-------------|
 | `MOTD` | `§6§lMineChamp §r§7\| §bMi Servidor` | Mensaje del servidor |
 
+#### Variables de Auto-Hibernación (Ahorro de costos)
+
+| Variable | Valor por defecto | Descripción |
+|----------|------------------|-------------|
+| `ENABLE_HIBERNATE` | `true` | Activa el apagado automático por inactividad |
+| `IDLE_TIMEOUT` | `10` | Minutos sin jugadores antes de apagar el servidor |
+
 ### Configuración según tu Plan de Railway
 
 **Railway Hobby Plan (Gratis - 512MB-1GB RAM):**
@@ -88,14 +127,18 @@ El servidor viene preconfigurado con:
 - **Variables de entorno** para configuración flexible sin tocar archivos
 - **Optimizaciones JVM** (Aikar's Flags) para mejor gestión de memoria
 - **Reinicio automático** ante fallos para máxima disponibilidad
+- **🌟 Proxy Wake-on-Connect** para encendido automático del servidor
+- **😴 Auto-hibernación** para ahorrar hasta 70% en costos
 
 Railway proporciona hosting en la nube con recursos escalables, facturación por uso, y TCP Proxy automático para que tu servidor sea accesible desde cualquier cliente de Minecraft.
 
 ## Why Deploy
 
-### ¿Por qué elegir este template?
+### ¿Por qué elegir este template? con auto-encendido, sin necesidad de conocimientos técnicos avanzados.
 
-**🚀 Despliegue instantáneo**: En menos de 5 minutos tendrás un servidor de Minecraft funcional, sin necesidad de conocimientos técnicos avanzados.
+**💰 Económico y escalable**: Railway ofrece un plan gratuito para empezar. Con auto-hibernación, pagas solo cuando juegas. El proxy ligero cuesta ~$1/mes.
+
+**🎯 Wake-on-Connect**: El servidor se enciende automáticamente cuando alguien intenta conectarse. No más abrir Railway manualmente
 
 **💰 Económico y escalable**: Railway ofrece un plan gratuito para empezar y puedes escalar recursos según tus necesidades. Solo pagas por lo que usas.
 
@@ -174,7 +217,26 @@ Todas las dependencias críticas están incluidas en este template. Solo necesit
 
 ## 🌐 Conectarse al Servidor
 
-### Configurar TCP Proxy en Railway
+### Con Template Completo (Proxy activado)
+
+1. En Railway, ve al servicio **"MineChamp Proxy"**
+2. Pestaña **"Networking"** → Copia el dominio TCP (ej: `minechamp.railway.app:12345`)
+3. Abre Minecraft 1.21.11
+4. Multijugador → Añadir Servidor
+5. **Dirección:** Pega el dominio completo
+6. ¡Juega! El servidor se enciende automáticamente si está apagado
+
+**Comportamiento:**
+- 🟢 **Servidor activo**: Conexión instantánea
+- 🟡 **Servidor dormido**: Verás "Iniciando servidor...", reconecta en 1-2 minutos
+- ⏰ **Auto-apagado**: Si no hay jugadores por 10 minutos, se apaga solo
+
+---
+
+### Sin Proxy (Deploy manual)
+
+<details>
+<summary>Click para ver instrucciones sin proxy</summary>
 
 **Paso importante antes de conectarte:**
 
@@ -199,6 +261,10 @@ Todas las dependencias críticas están incluidas en este template. Solo necesit
 - ❌ **NO USES:** El dominio HTTP/HTTPS (`tudominio.devchefs.mx`)
 - 🔌 **Puerto interno:** Siempre debe ser 25565 (puerto estándar de Minecraft)
 - 🌐 **Puerto externo:** Railway lo asigna automáticamente (puede variar)
+
+</details>
+
+---
 
 ## ⚙️ Personalización
 
@@ -279,12 +345,13 @@ MAX_PLAYERS=10
 - Cada jugador consume CPU y RAM
 - Sé realista con la cantidad esperada
 
-**4. Desactiva el Servidor cuando no se Use**
+**4. Usa Auto-Hibernación (Ya incluida en el template)**
 
-Railway cobra por tiempo de ejecución:
-- **Opción 1:** Detén manualmente el servidor desde Railway Dashboard
-- **Opción 2:** Usa el comando `/stop` en los logs
-- **Opción 3:** Configura un horario de uso (requiere scripts externos)
+Con el template completo, el servidor se apaga automáticamente:
+- ✅ **Ya configurado**: No necesitas hacer nada
+- ✅ **Apagado inteligente**: Solo cuando no hay jugadores
+- ✅ **Encendido automático**: El proxy lo inicia cuando alguien se conecta
+- ⚙️ **Ajustable**: Cambia `IDLE_TIMEOUT` para modificar los minutos de espera
 
 **5. Optimiza las Configuraciones del Servidor**
 
@@ -339,6 +406,108 @@ Railway Hobby Plan incluye:
 - Para servidores públicos permanentes
 
 💡 **Tip Pro:** Combina Railway con un bot de Discord que inicie/detenga el servidor automáticamente cuando los jugadores lo necesiten.
+
+---
+
+## 😴 Auto-Hibernación (Ahorro Automático)
+
+### ¿Qué es la Auto-Hibernación?
+
+El servidor incluye un sistema de **apagado automático por inactividad** que:
+- ✅ Monitorea constantemente si hay jugadores conectados
+- ✅ Apaga el servidor automáticamente cuando no hay jugadores por X minutos
+- ✅ Guarda el mundo correctamente antes de apagar
+- ✅ **Puede ahorrar hasta 80% en costos de Railway**
+
+### Configuración
+
+La auto-hibernación viene **habilitada por defecto**. Configura estas variables en Railway:
+
+```env
+ENABLE_HIBERNATE=true    # Activar/desactivar (true/false)
+IDLE_TIMEOUT=10          # Minutos sin jugadores antes de apagar
+```
+
+**Ejemplos de configuración:**
+
+| Uso | IDLE_TIMEOUT | Descripción |
+|-----|--------------|-------------|
+| Servidor casual | `5` | Apaga rápido, máximo ahorro |
+| Servidor normal | `10` | Balance entre ahorro y disponibilidad |
+| Servidor activo | `30` | Más tiempo de espera para reconexiones |
+| Deshabilitado | `ENABLE_HIBERNATE=false` | Servidor 24/7 |
+
+### ¿Cómo encender el servidor después de hibernar?
+
+#### Con Template Completo (Recomendado) ✅
+
+**¡Automático!** Si usaste el botón "Deploy on Railway" del inicio:
+- ✅ El proxy detecta cuando alguien intenta conectarse
+- ✅ Enciende el servidor automáticamente
+- ✅ Muestra "Iniciando servidor..." mientras arranca
+- ✅ El jugador solo debe reconectarse en 1-2 minutos
+
+**No necesitas hacer nada manualmente** 🎉
+
+---
+
+#### Sin Template (Deploy manual)
+
+Si desplegaste solo el servidor sin el proxy, puedes encenderlo manualmente:
+
+<details>
+<summary>Ver opciones manuales de encendido</summary>
+
+**Opción A: Desde Railway Dashboard**
+1. Ve a tu proyecto en [Railway.app](https://railway.app)
+2. Click en tu servicio de MineChamp
+3. Ve a **Deployments** → Click en **"Redeploy"**
+4. El servidor iniciará en ~1-2 minutos
+
+#### Opción 3: Con la CLI de Railway
+```bash
+# Instalar Railway CLI
+npm install -g @railway/cli
+
+# Login
+railway login
+
+# Redeploy del proyecto
+railway up
+```
+
+**Opción B: Bot de Discord**
+Puedes crear un bot de Discord que use la API de Railway para encender el servidor:
+
+```javascript
+// Ejemplo básico de encendido via Railway API
+const response = await fetch('https://backboard.railway.app/graphql/v2', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer TU_TOKEN_DE_RAILWAY',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    query: `mutation { serviceInstanceRedeploy(serviceId: "TU_SERVICE_ID", environmentId: "production") }`
+  })
+});
+```
+
+</details>
+
+---
+
+### Estimación de Ahorro
+
+| Escenario | Sin Hibernación | Con Hibernación + Proxy | Ahorro |
+|-----------|-----------------|-------------------------|--------|
+| Juego casual (20h/semana) | ~$15/mes | ~$4-6/mes | **60-70%** |
+| Juego regular (40h/semana) | ~$15/mes | ~$7-9/mes | **40-50%** |
+| Juego intensivo (80h/semana) | ~$15/mes | ~$11-13/mes | **15-25%** |
+
+*El proxy agrega ~$0.50-1/mes pero permite encendido automático*
+
+---
 
 ## 🐛 Solución de Problemas
 
@@ -412,8 +581,36 @@ Luego en logs de Railway:
 ✅ Reinicio automático ante fallos  
 ✅ Logs en tiempo real  
 ✅ Soporte para persistencia de datos  
+✅ **Auto-hibernación por inactividad (ahorra hasta 80%)**  
+✅ **Apagado automático sin jugadores conectados**  
+✅ **🌟 Proxy Wake-on-Connect incluido** - Encendido automático del servidor
 
 ---
+
+## 📦 ¿Qué incluye este template?
+
+Cuando haces deploy con el botón de arriba, Railway crea automáticamente:
+
+### 🚪 MineChamp Proxy (~$1/mes, siempre activo)
+- Detecta cuando alguien intenta conectarse
+- Enciende el servidor automáticamente via Railway API
+- Muestra "Iniciando servidor..." mientras arranca
+- Hace forwarding directo cuando el servidor está activo
+- Ultra ligero: Node.js Alpine (~50MB)
+
+### ⛏️ MineChamp Server (solo paga cuando está activo)
+- Servidor Minecraft 1.21.11 Vanilla
+- Java 21 optimizado con Aikar's Flags
+- Auto-hibernación tras 10 minutos sin jugadores
+- Guarda el mundo antes de apagar
+- Red privada (solo accesible via proxy)
+
+### 🔄 Flujo completo automatizado
+```
+Jugador ──► Proxy detecta ──► ¿Server dormido? ──► Enciende via API ──► Espera 1-2 min ──► Conecta
+                                      │
+                                      └─► ¿Server activo? ──► Conecta inmediatamente
+```
 
 **Repositorio:** https://github.com/Dubbxd/minechamp  
 **¡Servidor listo en 5 minutos! 🚂⛏️**

@@ -1,13 +1,59 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
-  "build": {
-    "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile"
-  },
-  "deploy": {
-    "numReplicas": 1,
-    "sleepApplication": false,
-    "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
-  }
+  "services": [
+    {
+      "name": "minechamp-proxy",
+      "icon": "🚪",
+      "source": {
+        "dockerfile": "proxy/Dockerfile",
+        "directory": "proxy"
+      },
+      "variables": {
+        "PROXY_PORT": "25565",
+        "MC_SERVER_HOST": "${{minechamp-server.RAILWAY_PRIVATE_DOMAIN}}",
+        "MC_SERVER_PORT": "25565",
+        "RAILWAY_SERVICE_ID": "${{minechamp-server.RAILWAY_SERVICE_ID}}",
+        "RAILWAY_ENVIRONMENT_ID": "${{RAILWAY_ENVIRONMENT_ID}}",
+        "SERVER_MOTD": "§6§l⛏ MineChamp §r§7| §eClick para iniciar servidor",
+        "STARTING_MOTD": "§6§l⛏ MineChamp §r§7| §aIniciando servidor...",
+        "COOLDOWN_MINUTES": "2"
+      },
+      "domains": [
+        {
+          "type": "tcp",
+          "port": 25565
+        }
+      ],
+      "healthcheck": {
+        "enabled": false
+      }
+    },
+    {
+      "name": "minechamp-server",
+      "icon": "⛏️",
+      "source": {
+        "dockerfile": "Dockerfile"
+      },
+      "variables": {
+        "MEMORY_MIN": "1G",
+        "MEMORY_MAX": "2G",
+        "SERVER_PORT": "25565",
+        "ONLINE_MODE": "false",
+        "MAX_PLAYERS": "20",
+        "VIEW_DISTANCE": "10",
+        "DIFFICULTY": "normal",
+        "GAMEMODE": "survival",
+        "PVP": "true",
+        "ENABLE_HIBERNATE": "true",
+        "IDLE_TIMEOUT": "10",
+        "MOTD": "§6§l⛏ MineChamp §r§7By §bDubbxd"
+      },
+      "networking": {
+        "privateOnly": true
+      },
+      "healthcheck": {
+        "enabled": false
+      }
+    }
+  ]
 }

@@ -24,6 +24,10 @@ backups/
 # Plugins
 plugins/
 
+# Proxy dependencies
+proxy/node_modules/
+proxy/package-lock.json
+
 # Sistema
 .DS_Store
 Thumbs.db

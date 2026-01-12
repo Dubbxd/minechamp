@@ -20,12 +20,13 @@ COPY server.properties .
 COPY bukkit.yml .
 COPY spigot.yml .
 COPY start.sh .
+COPY hibernate-monitor.sh .
 
 # Crear directorios necesarios
 RUN mkdir -p world world_nether world_the_end plugins logs backups
 
-# Hacer ejecutable el script de inicio
-RUN chmod +x start.sh
+# Hacer ejecutables los scripts
+RUN chmod +x start.sh hibernate-monitor.sh
 
 # Exponer puerto de Minecraft
 EXPOSE 25565
@@ -39,7 +40,9 @@ ENV MEMORY_MIN=1G \
     VIEW_DISTANCE=10 \
     DIFFICULTY=normal \
     GAMEMODE=survival \
-    PVP=true
+    PVP=true \
+    ENABLE_HIBERNATE=true \
+    IDLE_TIMEOUT=10
 
 # Comando de inicio
 CMD ["./start.sh"]

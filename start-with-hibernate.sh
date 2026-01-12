@@ -1,9 +1,10 @@
 #!/bin/bash
-# Script de inicio para MineChamp Server en Railway/Linux
-# Version 1.21.11 con Auto-Hibernación
+# Script de inicio con Auto-Hibernación para MineChamp Server
+# Version 1.21.11 con soporte de apagado automático por inactividad
 
 echo "=========================================="
 echo "      MineChamp Server v1.21.11"
+echo "    Con Auto-Hibernación habilitada"
 echo "    Iniciando en Railway.app..."
 echo "=========================================="
 echo ""
@@ -20,6 +21,8 @@ MEMORY_MAX=${MEMORY_MAX:-2G}
 SERVER_PORT=${SERVER_PORT:-25565}
 ENABLE_HIBERNATE=${ENABLE_HIBERNATE:-true}
 IDLE_TIMEOUT=${IDLE_TIMEOUT:-10}
+RCON_PASSWORD=${RCON_PASSWORD:-minechamp}
+RCON_PORT=${RCON_PORT:-25575}
 
 # Actualizar server.properties con variables de entorno
 if [ -f "server.properties" ]; then
@@ -31,6 +34,11 @@ if [ -f "server.properties" ]; then
     sed -i "s/difficulty=.*/difficulty=${DIFFICULTY:-normal}/" server.properties
     sed -i "s/gamemode=.*/gamemode=${GAMEMODE:-survival}/" server.properties
     sed -i "s/pvp=.*/pvp=${PVP:-true}/" server.properties
+    
+    # Habilitar RCON para el monitor de hibernación
+    sed -i "s/enable-rcon=.*/enable-rcon=true/" server.properties
+    sed -i "s/rcon.password=.*/rcon.password=${RCON_PASSWORD}/" server.properties
+    sed -i "s/rcon.port=.*/rcon.port=${RCON_PORT}/" server.properties
     
     # Configurar MOTD si está definido
     if [ ! -z "$MOTD" ]; then
@@ -45,11 +53,9 @@ echo "  Puerto: ${SERVER_PORT}"
 echo "  Jugadores máximos: ${MAX_PLAYERS:-20}"
 echo "  Dificultad: ${DIFFICULTY:-normal}"
 echo ""
-echo "Auto-Hibernación:"
+echo "Configuración de Auto-Hibernación:"
 echo "  Habilitada: ${ENABLE_HIBERNATE}"
-if [ "$ENABLE_HIBERNATE" = "true" ]; then
-    echo "  Apagado tras inactividad: ${IDLE_TIMEOUT} minutos"
-fi
+echo "  Tiempo de inactividad: ${IDLE_TIMEOUT} minutos"
 echo ""
 
 # Flags de JVM optimizadas (Aikar's flags adaptadas)
@@ -69,18 +75,20 @@ JVM_FLAGS="-Xms${MEMORY_MIN} -Xmx${MEMORY_MAX} \
 -XX:InitiatingHeapOccupancyPercent=15 \
 -XX:G1MixedGCLiveThresholdPercent=90 \
 -XX:G1RSetUpdatingPauseTimePercent=5 \
-# Iniciar monitor de hibernación en segundo plano si está habilitado
-if [ "$ENABLE_HIBERNATE" = "true" ] && [ -f "/minecraft/hibernate-monitor.sh" ]; then
-    echo "Iniciando monitor de auto-hibernación..."
-    /minecraft/hibernate-monitor.sh &
-    echo ""
-fi
-
 -XX:SurvivorRatio=32 \
 -XX:+PerfDisableSharedMem \
 -XX:MaxTenuringThreshold=1 \
 -Dusing.aikars.flags=https://mcflags.emc.gs \
 -Daikars.new.flags=true"
+
+# Iniciar monitor de hibernación en segundo plano si está habilitado
+if [ "$ENABLE_HIBERNATE" = "true" ]; then
+    echo "Iniciando monitor de hibernación en segundo plano..."
+    /minecraft/hibernate-monitor.sh &
+    HIBERNATE_PID=$!
+    echo "Monitor de hibernación PID: $HIBERNATE_PID"
+    echo ""
+fi
 
 echo "Iniciando servidor Minecraft..."
 echo ""
