@@ -1,60 +1,87 @@
 # 🎮 MineChamp - Instrucciones de Configuración Post-Deploy
 
-¡Gracias por usar MineChamp! Sigue estos pasos para configurar tu servidor de Minecraft.
-
----
-
-## ✅ Paso 1: Espera a que termine el Deploy (2-3 minutos)
-
-Railway está construyendo dos servicios:
-- 🚪 **MineChamp Proxy** - Encendido automático del servidor
+¡Gracias por usar MineChamp! El template ha desplegado automáticamente **2 servicios**:
+- 🚪 **Proxy Conect** - Encendido automático del servidor
 - ⛏️ **MineChamp** - Servidor de Minecraft 1.21.11
 
-**Espera a que ambos servicios muestren** ✅ **"Active"**
+**Solo necesitas configurar 2 variables en el Proxy** y ¡listo para jugar!
 
 ---
 
-## 🔑 Paso 2: Configurar el Railway Token (IMPORTANTE)
+## ✅ Paso 1: Espera a que terminen de construirse (3-5 minutos)
 
-Para que el proxy pueda encender automáticamente el servidor, necesitas configurar un token de Railway:
+Ambos servicios se están construyendo automáticamente. Verás:
+- 🟡 **Building...** → 🟢 **Active** (Proxy Conect)
+- 🟡 **Building...** → 🟢 **Active** (MineChamp)
 
-### 2.1 Crear el Token
+**Espera a que ambos muestren** ✅ **"Active"** antes de continuar.
+
+---
+
+## 🔑 Paso 2: Configurar el Railway Token en el Proxy (IMPORTANTE)
+
+Para que el proxy pueda encender automáticamente el servidor cuando alguien se conecta, necesitas configurar un token de Railway.
+
+### 2.1 Crear el Token de Railway
 
 1. Ve a: **https://railway.app/account/tokens**
 2. Click en **"Create Token"**
 3. Dale un nombre: `minechamp-proxy`
-4. **Copia el token** que se genera (solo se muestra una vez)
+4. **Copia el token** que se genera (⚠️ solo se muestra una vez, guárdalo bien)
 
-### 2.2 Agregar el Token al Proxy
+### 2.2 Obtener el Service ID del Servidor
 
-1. En tu proyecto de Railway, click en el servicio **"MineChamp Proxy"**
+1. En tu proyecto de Railway, click en el servicio **"MineChamp"** (el servidor)
+2. Ve a la pestaña **"Settings"**
+3. Baja hasta encontrar **"Service ID"**
+4. **Copia ese ID** (algo como: `abc12345-def6-7890-ghij-klmnopqrstuv`)
+
+### 2.3 Agregar las Variables al Proxy
+
+1. Click en el servicio **"Proxy Conect"**
 2. Ve a la pestaña **"Variables"**
-3. Busca la variable **`RAILWAY_TOKEN`**
-4. Pega el token que copiaste
-5. Click en **"Save"** o presiona Enter
+3. Click en **"New Variable"** o **"Add Variable"**
+4. Agrega estas **2 variables importantes**:
 
-El proxy se reiniciará automáticamente con el nuevo token.
+| Variable Name | Value | Dónde obtenerlo |
+|---------------|-------|----------------|
+| `RAILWAY_TOKEN` | `tu-token-aqui` | Paso 2.1 (tokens de Railway) |
+| `RAILWAY_SERVICE_ID` | `abc12345-...` | Paso 2.2 (Service ID del servidor) |
+
+5. Click en **"Add"** o presiona Enter en cada variable
+6. El proxy se reiniciará automáticamente (espera ~30 segundos)
+
+### 2.4 (Opcional) Agregar variables adicionales
+
+Si quieres personalizar más, agrega también:
+
+| Variable Name | Value Default | Descripción |
+|---------------|---------------|-------------|
+| `MC_SERVER_HOST` | `minechamp.railway.internal` | Host interno del servidor |
+| `MC_SERVER_PORT` | `25565` | Puerto del servidor |
+| `IDLE_TIMEOUT` | `10` | Minutos sin jugadores antes de apagar |
 
 ---
 
 ## 🌐 Paso 3: Obtener la Dirección del Servidor
 
-1. Click en el servicio **"MineChamp Proxy"** (no el servidor)
-2. Ve a la pestaña **"Settings"** o **"Networking"**
-3. Busca el **TCP Proxy Domain**
-4. Copia la dirección completa (ejemplo: `minechamp-production.up.railway.app:12345`)
+1. Click en el servicio **"Proxy Conect"** (NO en MineChamp)
+2. Ve a la pestaña **"Settings"**
+3. En la sección **"Networking"** busca el **TCP Proxy**
+4. Verás una dirección como: `proxy-production.up.railway.app:12345`
+5. **Copia esa dirección completa** (con el puerto)
 
-⚠️ **Importante:** Usa la dirección del **Proxy**, NO del servidor de Minecraft.
+⚠️ **Importante:** Usa la dirección del **Proxy Conect**, NO del servidor MineChamp.
 
 ---
 
 ## 🎮 Paso 4: Conectarte desde Minecraft
 
-1. Abre **Minecraft 1.21.11**
+1. Abre **Minecraft 1.21.11** (Java Edition)
 2. Click en **"Multijugador"**
 3. Click en **"Añadir Servidor"**
-4. **Nombre del servidor:** Lo que quieras (ej: "MineChamp")
-5. **Dirección del servidor:** Pega la dirección TCP del Proxy
+4. **Nombre del servidor:** Lo que quieras (ej: "MineChamp Server")
+5. **Dirección del servidor:** Pega la dirección TCP del Proxy (del Paso 3)
 6. Click en **"Listo"**
 7. ¡Conéctate y juega!
 
@@ -62,17 +89,17 @@ El proxy se reiniciará automáticamente con el nuevo token.
 
 ## 💡 ¿Cómo funciona la Auto-Hibernación?
 
-### Primera vez / Servidor apagado
-- Intentas conectarte → Verás "Iniciando servidor..."
-- **Espera 1-2 minutos** mientras el servidor arranca
-- Vuelve a conectarte → ¡Listo para jugar!
+### Primera vez / Servidor apagado 😴
+- Intentas conectarte → Verás **"Iniciando servidor..."**
+- **Espera 1-2 minutos** mientras el servidor arranca automáticamente
+- Vuelve a intentar conectarte → ¡Listo para jugar! 🎮
 
-### Servidor activo
-- Conexión instantánea, sin esperas
+### Servidor activo 🟢
+- Conexión **instantánea**, sin esperas
 
-### Auto-apagado
-- Si no hay jugadores por **10 minutos**, el servidor se apaga automáticamente
-- El mundo se guarda antes de apagar
+### Auto-apagado 💤
+- Si no hay jugadores por **10 minutos**, el servidor se apaga solo
+- El mundo se guarda automáticamente antes de apagar
 - ¡Solo pagas cuando juegas! 💰
 
 ---
@@ -81,35 +108,39 @@ El proxy se reiniciará automáticamente con el nuevo token.
 
 ### Cambiar tiempo de inactividad
 
-1. En Railway → Servicio **"MineChamp"**
-2. Variables → `IDLE_TIMEOUT`
-3. Cambia el valor (minutos): `5` = más ahorro, `30` = más tiempo activo
+1. En Railway → Servicio **"MineChamp"** (servidor)
+2. Variables → Busca o agrega `IDLE_TIMEOUT`
+3. Cambia el valor (en minutos):
+   - `5` = Más ahorro (apaga rápido)
+   - `10` = Balance (default)
+   - `30` = Más tiempo activo
 
 ### Permitir launchers alternativos (TLauncher, etc.)
 
-Ya está configurado por defecto. Variable `ONLINE_MODE=false`
+✅ Ya está configurado por defecto: `ONLINE_MODE=false`
 
 ### Cambiar RAM del servidor
 
-1. Variables → `MEMORY_MAX`
+1. Variables del servidor **"MineChamp"** → `MEMORY_MAX`
 2. Valores recomendados:
-   - **1G** - Para 2-5 jugadores
+   - **1G** - Para 2-5 jugadores (bajo costo)
    - **2G** - Para 10-20 jugadores (default)
-   - **4G** - Para 20+ jugadores
+   - **4G** - Para 20+ jugadores (más potente)
 
-### Cambiar dificultad o modo de juego
+### Personalizar el servidor
 
-Variables disponibles:
+Variables disponibles en **"MineChamp"**:
 - `DIFFICULTY`: `peaceful`, `easy`, `normal`, `hard`
 - `GAMEMODE`: `survival`, `creative`, `adventure`, `spectator`
 - `PVP`: `true` o `false`
 - `MAX_PLAYERS`: Número máximo de jugadores
+- `VIEW_DISTANCE`: Chunks de visión (6-16)
 
 ---
 
 ## 🛠️ Comandos de Administrador
 
-Para ejecutar comandos, ve a Railway → Servicio **"MineChamp"** → Pestaña **"Logs"**
+Para ejecutar comandos, ve a Railway → Servicio **"MineChamp"** → Pestaña **"Logs"** → Escribe en la consola
 
 **Comandos útiles:**
 ```
@@ -126,29 +157,41 @@ Para ejecutar comandos, ve a Railway → Servicio **"MineChamp"** → Pestaña *
 ## 🐛 Solución de Problemas
 
 ### "No puedo conectarme"
-✅ Verifica que estás usando la dirección del **Proxy** (no del servidor)  
-✅ Asegúrate de tener **Minecraft 1.21.11**  
-✅ Espera 1-2 minutos si dice "Iniciando servidor..."
+✅ **Verifica:**
+- ¿Usaste la dirección TCP del **Proxy Conect** (no del servidor)?
+- ¿Tienes **Minecraft 1.21.11**?
+- ¿Configuraste el `RAILWAY_TOKEN` en el Proxy?
+- ¿Ambos servicios están **Active** (verde)?
+
+### "Dice 'Initiating server...'" o "Can't connect to server"
+✅ **El servidor está encendiéndose:**
+- Espera **1-2 minutos**
+- Vuelve a intentar conectarte
+- Es normal la primera vez o después de hibernación
 
 ### "El servidor no se enciende automáticamente"
-✅ ¿Configuraste el `RAILWAY_TOKEN` en el Proxy?  
-✅ Ve a los logs del Proxy, busca errores  
-✅ Verifica que ambos servicios estén "Active"
+✅ **Revisa el Proxy:**
+1. ¿Configuraste el `RAILWAY_TOKEN` correctamente?
+2. ¿Configuraste el `RAILWAY_SERVICE_ID` del servidor MineChamp?
+3. Ve a Logs del **Proxy Conect**, busca errores
+4. Debe decir: "✅ Proxy escuchando en puerto 25565"
 
-### "Dice 'Connection timed out'"
-✅ El servidor podría estar iniciándose, espera 2 minutos  
-✅ Verifica en Railway que el servidor esté "Active"  
-✅ Revisa los logs del servidor para ver si hay errores
+### "Error: Variables de Railway no configuradas"
+✅ **Falta configurar el Proxy:**
+- Ve al Paso 2 y configura `RAILWAY_TOKEN` y `RAILWAY_SERVICE_ID`
 
-### "Los logs del Proxy muestran errores de API"
-✅ El `RAILWAY_TOKEN` podría estar incorrecto, créalo de nuevo  
-✅ El token debe tener permisos para manejar el proyecto
+### "Los logs del Proxy dicen: ERROR 401 o 403"
+✅ **Token incorrecto:**
+- El `RAILWAY_TOKEN` está mal o expiró
+- Crea un nuevo token en https://railway.app/account/tokens
+- Actualiza la variable en el Proxy
 
 ### "El mundo se perdió"
-❌ Esto no debería pasar. El servidor guarda automáticamente  
-✅ Para más seguridad, configura un **Volume** en Railway:
-   - Settings → Volumes → Add Volume
-   - Mount path: `/minecraft/world`
+❌ **Esto no debería pasar**, el servidor guarda automáticamente  
+✅ **Para más seguridad**, configura un **Volume**:
+- Settings → Volumes → Add Volume
+- Mount path: `/minecraft/world`
+- Esto garantiza persistencia incluso si se borra el contenedor
 
 ---
 
@@ -156,51 +199,66 @@ Para ejecutar comandos, ve a Railway → Servicio **"MineChamp"** → Pestaña *
 
 1. Railway Dashboard → Tu proyecto
 2. Click en **"Usage"** o **"Metrics"**
-3. Verás el consumo de CPU, RAM y costos estimados
+3. Verás consumo de CPU, RAM y costos estimados
 
-**Costos estimados:**
-- **Proxy**: ~$0.50-1.00/mes (siempre activo, muy ligero)
-- **Servidor**: Variable según uso
-  - 20h/semana: ~$3-4/mes
-  - 40h/semana: ~$6-7/mes
-  - 24/7: ~$15-20/mes
+**Costos estimados con auto-hibernación:**
+
+| Uso | Horas/mes | Costo Proxy | Costo Server | Total |
+|-----|-----------|-------------|--------------|-------|
+| Casual (fines de semana) | ~20h | $1.00 | $3-4 | **$4-5/mes** |
+| Regular (tardes) | ~40h | $1.00 | $6-7 | **$7-8/mes** |
+| Intensivo (diario) | ~80h | $1.00 | $10-11 | **$11-12/mes** |
+| 24/7 (sin hibernar) | 730h | $1.00 | $18-20 | **$19-21/mes** |
+
+⚠️ **Con hibernación ahorras 60-70%** comparado con servidor 24/7
 
 ---
 
 ## 📊 Optimizar para Ahorrar Más
 
-1. **Reduce RAM** si tienes pocos jugadores: `MEMORY_MAX=1G`
-2. **Reduce View Distance**: `VIEW_DISTANCE=6`
-3. **Baja Idle Timeout**: `IDLE_TIMEOUT=5` (apaga más rápido)
-4. **Limita jugadores**: `MAX_PLAYERS=10`
+**En el servidor "MineChamp":**
+
+1. **Reduce RAM** si tienes pocos jugadores:
+   - `MEMORY_MAX=1G` para 2-5 jugadores
+
+2. **Reduce View Distance**:
+   - `VIEW_DISTANCE=6` (más ahorro)
+   - `VIEW_DISTANCE=10` (default)
+
+3. **Baja Idle Timeout** (apaga más rápido):
+   - `IDLE_TIMEOUT=5` (apaga a los 5 min)
+
+4. **Limita jugadores**:
+   - `MAX_PLAYERS=10`
 
 ---
 
 ## 🎯 Próximos Pasos
 
-- ✅ Invita amigos a jugar
+- ✅ Invita amigos a jugar (comparte la dirección TCP del Proxy)
 - ✅ Personaliza el MOTD del servidor
-- ✅ Añade plugins (coloca `.jar` en carpeta `plugins/`)
 - ✅ Configura whitelist si quieres servidor privado
-- ✅ Monitorea costos y ajusta según necesites
+- ✅ Monitorea costos y ajusta variables según necesites
+- ✅ Explora plugins (coloca `.jar` en carpeta `plugins/`)
 
 ---
 
 ## 📚 Documentación Completa
 
-Para más información detallada:
 - **GitHub:** https://github.com/Dubbxd/minechamp
-- **README completo:** [Ver README.md](https://github.com/Dubbxd/minechamp/blob/main/README.md)
-- **Guía de despliegue:** [Ver DEPLOY-GUIDE.md](https://github.com/Dubbxd/minechamp/blob/main/DEPLOY-GUIDE.md)
+- **README:** [Ver documentación completa](https://github.com/Dubbxd/minechamp/blob/main/README.md)
+- **Guía rápida:** [DEPLOY-GUIDE.md](https://github.com/Dubbxd/minechamp/blob/main/DEPLOY-GUIDE.md)
 
 ---
 
 ## ❓ ¿Necesitas Ayuda?
 
-- 🐛 **Issues:** https://github.com/Dubbxd/minechamp/issues
+- 🐛 **Reportar problemas:** https://github.com/Dubbxd/minechamp/issues
 - 💬 **Discusiones:** https://github.com/Dubbxd/minechamp/discussions
 - 👨‍💻 **Creador:** [@Dubbxd](https://github.com/Dubbxd)
 
 ---
 
-**¡Disfruta tu servidor MineChamp! ⛏️🎮**
+**¡Disfruta tu servidor MineChamp con auto-hibernación! ⛏️🎮💰**
+
+*Ahorra hasta 70% en costos mientras juegas con tus amigos*
