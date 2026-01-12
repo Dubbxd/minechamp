@@ -69,18 +69,18 @@ JVM_FLAGS="-Xms${MEMORY_MIN} -Xmx${MEMORY_MAX} \
 -XX:InitiatingHeapOccupancyPercent=15 \
 -XX:G1MixedGCLiveThresholdPercent=90 \
 -XX:G1RSetUpdatingPauseTimePercent=5 \
+-XX:SurvivorRatio=32 \
+-XX:+PerfDisableSharedMem \
+-XX:MaxTenuringThreshold=1 \
+-Dusing.aikars.flags=https://mcflags.emc.gs \
+-Daikars.new.flags=true"
+
 # Iniciar monitor de hibernación en segundo plano si está habilitado
 if [ "$ENABLE_HIBERNATE" = "true" ] && [ -f "/minecraft/hibernate-monitor.sh" ]; then
     echo "Iniciando monitor de auto-hibernación..."
     /minecraft/hibernate-monitor.sh &
     echo ""
 fi
-
--XX:SurvivorRatio=32 \
--XX:+PerfDisableSharedMem \
--XX:MaxTenuringThreshold=1 \
--Dusing.aikars.flags=https://mcflags.emc.gs \
--Daikars.new.flags=true"
 
 echo "Iniciando servidor Minecraft..."
 echo ""
