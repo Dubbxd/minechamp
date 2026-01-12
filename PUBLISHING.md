@@ -17,38 +17,33 @@
 
 ## Publicar en Railway
 
-### Opción 1: Template Público (Recomendado)
+### ⚠️ Importante: Railway Templates NO soportan multi-servicio automático
 
-1. **Ve a Railway Template Creator:**
-   - https://railway.app/new/template
+Railway actualmente no permite crear templates con múltiples servicios desde un solo repositorio de forma automática. 
 
-2. **Configura el template:**
-   - **Repository URL:** `https://github.com/Dubbxd/minechamp`
-   - **Name:** `MineChamp - Minecraft Server con Auto-Hibernación`
-   - **Description:** `Servidor de Minecraft 1.21.11 con proxy Wake-on-Connect que enciende automáticamente el servidor cuando alguien intenta conectarse. Ahorra hasta 70% en costos.`
-   - **Icon:** ⛏️ o 🎮
-   - **Demo URL:** (opcional) `https://github.com/Dubbxd/minechamp`
+**Tienes 2 opciones:**
 
-3. **Configura los servicios:**
-   
-   **Servicio 1: MineChamp Proxy**
-   - Name: `MineChamp Proxy`
-   - Root Directory: `proxy`
-   - Icon: 🚪
-   - Variables requeridas:
-     - `RAILWAY_TOKEN` (tipo: secret, descripción: "Token de Railway API - crear en railway.app/account/tokens")
-   
-   **Servicio 2: MineChamp Server**
-   - Name: `MineChamp`
-   - Root Directory: `/` (raíz)
-   - Icon: ⛏️
-   - Variables opcionales con defaults ya configurados en `railway.json`
+---
 
-4. **Publica:**
-   - Click en **"Publish Template"**
-   - Railway generará una URL como: `https://railway.app/template/minechamp`
+### Opción 1: Template Simple (Solo Servidor) - Recomendado para principiantes
 
-### Opción 2: Botón en README
+Este approach despliega solo el servidor de Minecraft con auto-hibernación. Los usuarios tendrán que encender manualmente el servidor desde Railway Dashboard.
+
+1. **El template actual ya funciona así** (1 servicio)
+2. **Actualiza la descripción:**
+   ```
+   Servidor de Minecraft 1.21.11 con auto-hibernación inteligente. Se apaga automáticamente cuando no hay jugadores por 10 minutos. Ahorra hasta 70% en costos. Compatible con todos los launchers.
+   ```
+3. **Los usuarios tendrán que:**
+   - Conectarse a la dirección TCP del servidor directamente
+   - Encender manualmente desde Railway si está apagado
+   - Esperar que se apague solo cuando no haya jugadores
+
+---
+
+### Opción 2: Instrucciones para Deploy Manual de 2 Servicios - Para usuarios avanzados
+
+Actualiza el README con instrucciones para que los usuarios creen ambos servicios manualmente:
 
 Actualiza el README.md con la URL del template:
 
