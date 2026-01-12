@@ -52,7 +52,7 @@ while true; do
         last_list=$(tail -50 "$SERVER_LOG" 2>/dev/null | grep "There are" | tail -1)
         
         if [[ ! -z "$last_list" ]]; then
-            player_count=$(echo "$last_list" | grep -oP 'There are \K[0-9]+' || echo "-1")
+            player_count=$(echo "$last_list" | grep -oP 'There are \K[0-9]+' || echo "0")
         else
             # Estimación basada en joins vs leaves
             player_count=$((recent_joins - recent_leaves))
@@ -64,9 +64,14 @@ while true; do
         player_count=0
     fi
     
+    # Asegurar que player_count es un número válido
+    if ! [[ "$player_count" =~ ^[0-9]+$ ]]; then
+        player_count=0
+    fi
+    
     current_time=$(date '+%H:%M:%S')
     
-    if [[ "$player_count" -le 0 ]]; then
+    if [ "$player_count" -le 0 ]; then
         # No hay jugadores o no se puede determinar
         idle_time=$((idle_time + CHECK_INTERVAL))
         remaining=$((idle_threshold - idle_time))
