@@ -54,83 +54,63 @@ Multijugador → Añadir Servidor → Pega la dirección TCP → ¡Juega!
 
 ---
 
-# Deploy and Host
+# Deploy and Host MineChamp on Railway
 
-MineChamp es un servidor de Minecraft 1.21.11 optimizado para Railway.app que se despliega automáticamente con dos servicios: un proxy ligero para wake-on-connect y el servidor de Minecraft con auto-hibernación inteligente.
+MineChamp es un servidor de Minecraft 1.21.11 con auto-hibernación inteligente que se despliega en Railway con un solo click. Incluye un proxy para wake-on-connect y ahorra hasta 70% en costos de hosting.
 
-## About Hosting
+## About Hosting MineChamp
 
-El sistema despliega automáticamente **2 servicios en Railway**:
-
-**🚪 Proxy Conect** (~50MB, ~$1/mes) - Servicio ligero que detecta conexiones de jugadores y enciende automáticamente el servidor mediante la API de Railway. Siempre activo pero consume recursos mínimos.
-
-**⛏️ MineChamp Server** - Servidor Minecraft 1.21.11 con auto-hibernación. Se apaga automáticamente tras 10 minutos sin jugadores y se enciende cuando alguien intenta conectarse. Solo pagas cuando está activo.
-
-El servidor incluye:
-- Java 21 Runtime con optimizaciones JVM (Aikar's Flags)
-- Docker containerizado para despliegues consistentes
-- Variables de entorno para configuración flexible
-- Sistema de hibernación que monitorea jugadores activos
-- Compatible con todos los launchers (TLauncher, Mojang, MultiMC)
-
-Railway proporciona hosting en la nube con recursos escalables, facturación por uso real, y TCP Proxy automático para accesibilidad global.
-
-## Why Deploy
-
-**🎯 Encendido Automático** - El proxy detecta cuando alguien intenta conectarse y enciende el servidor automáticamente via API de Railway. No necesitas mantener el servidor activo 24/7.
-
-**💰 Ahorra 60-70% en Costos** - Con auto-hibernación, solo pagas cuando juegas. Servidor 20h/semana: ~$4-5/mes vs $15-20/mes 24/7. El proxy siempre activo suma solo ~$1/mes.
-
-**🔧 Deploy en 1 Click** - El template despliega automáticamente ambos servicios. Solo configuras 2 variables en el proxy (RAILWAY_TOKEN y RAILWAY_SERVICE_ID) y listo.
-
-**✅ Compatible con Todos los Launchers** - Funciona con Mojang oficial, TLauncher, MultiMC, ATLauncher, y cualquier cliente Minecraft Java 1.21.11. `ONLINE_MODE=false` por defecto.
-
-**📊 Monitoreo en Tiempo Real** - Railway proporciona logs, métricas de CPU/RAM, y seguimiento de costos sin configuración adicional.
-
-**🛡️ Persistencia Garantizada** - Soporte para Railway Volumes. El servidor guarda automáticamente antes de apagarse.
+Hosting MineChamp en Railway despliega automáticamente dos servicios containerizados: un proxy ligero Node.js (~50MB) que detecta conexiones de jugadores y enciende el servidor automáticamente mediante la Railway API, y el servidor Minecraft 1.21.11 con auto-hibernación que se apaga tras 10 minutos sin jugadores. El servidor incluye Java 21 con optimizaciones JVM (Aikar's Flags), variables de entorno configurables, y compatibilidad con todos los launchers. Railway proporciona TCP Proxy automático, métricas en tiempo real, y facturación por uso real - solo pagas cuando el servidor está activo.
 
 ## Common Use Cases
 
-**🎮 Servidor Privado para Amigos (2-10 jugadores)** - El servidor se enciende solo cuando alguien quiere jugar. Configura whitelist para mantenerlo privado. Costo típico: $4-7/mes.
+- **Servidor Privado para Amigos (2-10 jugadores)** - Se enciende automáticamente cuando alguien quiere jugar, whitelist para privacidad, ~$4-7/mes
+- **Servidor Educativo o de Aula** - Auto-apagado fuera del horario escolar, control total de configuración, económico para presupuestos limitados
+- **Servidor de Pruebas y Desarrollo** - Testea mods, plugins o configuraciones sin desperdiciar recursos cuando no está en uso
+- **Servidor Comunitario Pequeño (10-20 jugadores)** - Auto-hibernación durante horas de poca actividad, escalable según crece la comunidad
+- **Servidor SMP Casual** - Para grupos que juegan fines de semana, acceso 24/7 vía proxy pero solo pagas horas de juego real
 
-**🏫 Servidor Educativo** - Se apaga automáticamente fuera del horario escolar. Control total sobre configuración y comandos. Económico para presupuestos limitados.
+## Dependencies for MineChamp Hosting
 
-**🎯 Servidor de Pruebas** - Testea mods, plugins o configuraciones sin desperdiciar recursos. El servidor se apaga cuando no lo usas.
-
-**🌐 Servidor Comunitario Pequeño (10-20 jugadores)** - Auto-hibernación durante horas de poca actividad. Escala recursos según crezca tu comunidad.
-
-**💼 Servidor SMP Casual** - Para grupos que juegan fines de semana o algunas tardes. El proxy permite acceso 24/7 pero solo pagas las horas de juego real.
-
-## Dependencies for
+- **Railway Account Token** - Crea en [railway.app/account/tokens](https://railway.app/account/tokens) para que el proxy pueda encender el servidor automáticamente
+- **Service ID del Servidor** - Obtenido desde Railway Dashboard → MineChamp → Settings → Service ID
+- **Minecraft Java Edition 1.21.11** - Requerido para conectarse al servidor
 
 ### Deployment Dependencies
 
 **Servicio 1: Proxy Conect**
-- Node.js 20 Alpine (incluido en Dockerfile)
-- minecraft-protocol npm package (auto-instalado)
-- Railway API GraphQL client (integrado)
+- Node.js 20 Alpine (incluido en [Dockerfile](proxy/Dockerfile))
+- [minecraft-protocol](https://www.npmjs.com/package/minecraft-protocol) npm package (auto-instalado)
+- Railway API GraphQL client integrado para wake-on-connect
 
 **Servicio 2: MineChamp Server**
-- Java 21 Eclipse Temurin (incluido en Dockerfile)
-- Bash shell (Alpine Linux base)
-- server.jar Minecraft 1.21.11 (incluido)
-- hibernate-monitor.sh (script de monitoreo incluido)
+- Java 21 Eclipse Temurin (incluido en [Dockerfile](Dockerfile))
+- Bash shell en Alpine Linux base
+- [server.jar Minecraft 1.21.11](https://www.minecraft.net/en-us/download/server) (incluido en repositorio)
+- hibernate-monitor.sh script de monitoreo (incluido en [start.sh](start.sh))
 
-**Configuración Post-Deploy:**
-- Railway Account Token (crear en railway.app/account/tokens)
-- Service ID del servidor MineChamp (copiar desde Railway Settings)
+**Archivos de Configuración Incluidos:**
+- [eula.txt](eula.txt) - EULA de Minecraft aceptada
+- [server.properties](server.properties) - Configuración base del servidor
+- [railway.json](railway.json) - Configuración del template multi-servicio
 
-**Archivos Incluidos:**
-- `eula.txt` - EULA de Minecraft aceptada
-- `server.properties` - Configuración base
-- `start.sh` - Script optimizado con JVM flags
-- `railway.json` - Configuración template multi-servicio
+**Enlaces de Referencia:**
+- [Repositorio GitHub](https://github.com/Dubbxd/minechamp)
+- [Guía Completa de Configuración](SETUP-INSTRUCTIONS.md)
+- [Guía Rápida de Despliegue](DEPLOY-GUIDE.md)
 
-**Opcional:**
-- Railway Volume en `/minecraft/world` (recomendado)
-- Custom Domain para proxy TCP (requiere Railway Pro)
+## Why Deploy MineChamp on Railway?
 
-Todas las dependencias críticas están pre-instaladas. El template es funcional inmediatamente, solo requiere 2 variables de configuración en el proxy.
+Railway is a singular platform to deploy your infrastructure stack. Railway will host your infrastructure so you don't have to deal with configuration, while allowing you to vertically and horizontally scale it.
+
+By deploying MineChamp on Railway, you are one step closer to supporting a complete full-stack application with minimal burden. Host your servers, databases, AI agents, and more on Railway.
+
+**Beneficios específicos de MineChamp en Railway:**
+- **Auto-Hibernación Nativa** - Solo pagas cuando juegas, ahorro del 60-70% vs servidores 24/7
+- **TCP Proxy Automático** - Railway configura networking automáticamente para Minecraft
+- **Escalabilidad Sencilla** - Ajusta RAM y recursos según necesidad sin reconfiguración
+- **Despliegue Multi-Servicio** - Proxy + Servidor desplegados automáticamente con un click
+- **Facturación por Uso Real** - Métricas precisas de consumo y costos en tiempo real
 
 ---
 
