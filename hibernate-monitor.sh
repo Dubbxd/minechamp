@@ -45,14 +45,18 @@ while true; do
     # Buscar las últimas 100 líneas del log para eventos recientes
     if [ -f "$SERVER_LOG" ]; then
         # Buscar el último mensaje de "list" o contar logins vs logouts
-        recent_joins=$(tail -200 "$SERVER_LOG" 2>/dev/null | grep -c "joined the game" || echo "0")
-        recent_leaves=$(tail -200 "$SERVER_LOG" 2>/dev/null | grep -c "left the game" || echo "0")
+        recent_joins=$(tail -200 "$SERVER_LOG" 2>/dev/null | grep -c "joined the game" 2>/dev/null || echo "0")
+        recent_leaves=$(tail -200 "$SERVER_LOG" 2>/dev/null | grep -c "left the game" 2>/dev/null || echo "0")
+        
+        # Asegurar que son números válidos
+        recent_joins=${recent_joins:-0}
+        recent_leaves=${recent_leaves:-0}
         
         # También verificar mensajes del tipo "There are X of"
-        last_list=$(tail -50 "$SERVER_LOG" 2>/dev/null | grep "There are" | tail -1)
+        last_list=$(tail -50 "$SERVER_LOG" 2>/dev/null | grep "There are" | tail -1 2>/dev/null || echo "")
         
         if [[ ! -z "$last_list" ]]; then
-            player_count=$(echo "$last_list" | grep -oP 'There are \K[0-9]+' || echo "0")
+            player_count=$(echo "$last_list" | grep -oP 'There are \K[0-9]+' 2>/dev/null || echo "0")
         else
             # Estimación basada en joins vs leaves
             player_count=$((recent_joins - recent_leaves))
